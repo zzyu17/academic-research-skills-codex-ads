@@ -1,0 +1,49 @@
+{
+  "name": "academic-research-suite",
+  "adapter_version": "0.1.0",
+  "generated_for": "codex",
+  "generated_date": "2026-04-25",
+  "source_repositories": [
+    {
+      "name": "academic-research-skills",
+      "url": "https://github.com/Imbad0202/academic-research-skills.git",
+      "commit": "aa96fa6a278fd61a02cbe5531a0b1c3ec8aa3613",
+      "included_paths": [
+        "deep-research",
+        "academic-paper",
+        "academic-paper-reviewer",
+        "academic-pipeline",
+        "shared",
+        "scripts",
+        "examples (excluding showcase PDFs)",
+        "docs/design",
+        "docs/PERFORMANCE.md",
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "experiment-agent",
+      "url": "https://github.com/Imbad0202/experiment-agent.git",
+      "commit": "9b063fa895eaf1f63ac99ac03f924f8d31aa8d26",
+      "included_paths": [
+        "experiment-agent"
+      ]
+    }
+  ],
+  "excluded_patterns": [
+    ".git",
+    ".github",
+    ".claude",
+    "examples/showcase/*.pdf"
+  ],
+  "packaging": {
+    "type": "single_codex_suite_skill",
+    "entrypoint": "skills/academic-research-suite/SKILL.md",
+    "vendored_root": "skills/academic-research-suite/ars"
+  },
+  "runtime_notes": [
+    "Claude Code agent-team wording is adapted by SKILL.md into Codex inline role-prompt usage.",
+    "The original local ARS checkout under /Users/imbad/Projects/HEEACT/academic-research-skills was not used as a write target.",
+    "Cross-model API behavior is disabled by default and requires explicit user request."
+  ]
+}
