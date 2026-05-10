@@ -14,7 +14,7 @@ description: >
   /ars-revision-coach, /ars-revision, and /ars-full. This skill vendors ARS
   role prompts, references, templates, and shared handoff schemas under ars/.
 metadata:
-  version: "0.1.4"
+  version: "0.1.5"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 ---
@@ -26,7 +26,7 @@ This is a Codex adapter for the ARS suite. The vendored ARS content lives under
 
 ## Versioning
 
-This Codex package is version `0.1.4`. The repo-root `VERSION`, this
+This Codex package is version `0.1.5`. The repo-root `VERSION`, this
 `SKILL.md` metadata version, and `manifest.json` `adapter_version` must match.
 Vendored ARS suite versions are tracked separately by source repository commit
 in `manifest.json`.
@@ -55,6 +55,42 @@ Choose the workflow by intent:
 
 If the request spans multiple workflows, start with `ars/academic-pipeline/WORKFLOW.md`
 unless the user clearly asked for a single phase.
+
+### Paper Topic Scoping Override
+
+Apply this override before the general paper/pipeline routing rule.
+
+If the user says they want to write a paper, thesis, proposal, article, journal
+article, or manuscript, but they only provide a broad topic, tentative title,
+research interest, or "題目/主題/方向" and do **not** provide a clear,
+answerable research question, route to `ars/deep-research/WORKFLOW.md` in
+`socratic` mode first. This matches the upstream ARS experience where vague
+paper-topic requests start with SCR/Socratic narrowing instead of immediate
+outline or drafting.
+
+Treat these as Socratic triggers even when the wording contains paper-writing
+intent:
+
+- "I want to write a paper on ..."
+- "I have a paper topic/title ..."
+- "我想做一篇論文，題目是..."
+- "我有一個研究方向/主題，但還不確定問題"
+- "幫我想論文題目/收斂研究問題"
+
+First response in this path:
+
+1. State that the request is being routed to `deep-research` `socratic` mode
+   because the research question is not yet precise.
+2. Ask 3-5 Socratic narrowing questions using `socratic_mentor_agent` and
+   `research_question_agent` guidance.
+3. Do not produce an outline, draft, literature review, or full pipeline
+   dashboard until the user has converged on at least one candidate RQ.
+
+Route directly to `ars/academic-paper/WORKFLOW.md` only when the user already
+has a clear RQ, approved study frame, data/results, literature matrix, draft,
+or explicitly asks to skip scoping and proceed to outline/drafting. Route to
+`ars/academic-pipeline/WORKFLOW.md` only when the user explicitly asks for the
+full research-to-paper pipeline or says to continue after Socratic scoping.
 
 ## Claude-Style Alias Router
 

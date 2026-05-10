@@ -38,7 +38,7 @@ Use this repo when you want the Codex-native single-suite skill.
 
 ## Versioning
 
-This Codex package is version `0.1.4`. The repo-root `VERSION` file,
+This Codex package is version `0.1.5`. The repo-root `VERSION` file,
 `skills/academic-research-suite/SKILL.md` metadata version, and
 `skills/academic-research-suite/manifest.json` `adapter_version` track the
 Codex package version independently of the vendored ARS suite. Vendored upstream
@@ -136,6 +136,18 @@ Goal: write a journal article.
 Current materials: I have a literature matrix and rough findings, but no outline.
 Output needed now: paper architecture and missing-evidence checklist.
 Constraints: Traditional Chinese, APA 7, higher education policy audience.
+```
+
+If you only have a paper topic or broad research direction and do not yet have a
+clear research question, the Codex router should start with ARS Socratic
+scoping:
+
+```text
+Use $academic-research-suite.
+
+我想做一篇論文，題目方向是 AI adoption in higher education quality assurance。
+我還沒有明確 research question。
+請先用 SCR / Socratic 問答幫我收斂問題，不要先寫大綱。
 ```
 
 For review tasks, provide the manuscript or a path to the manuscript, plus the
