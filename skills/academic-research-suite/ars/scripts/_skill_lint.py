@@ -7,6 +7,7 @@ a value drawn from a closed vocabulary.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
@@ -28,13 +29,27 @@ class FrontmatterError(Exception):
     """
 
 
-def iter_skill_files(root: Path) -> list[Path]:
-    """Top-level SKILL.md files only. Skips SKIP_DIRS."""
+def codex_entry_name(root: Path) -> str:
+    """Return WORKFLOW.md for the Codex vendored layout, otherwise SKILL.md."""
+    manifest_path = root.parent / "manifest.json"
+    if not manifest_path.is_file():
+        return "SKILL.md"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return "SKILL.md"
+    if isinstance(manifest, dict) and manifest.get("generated_for") == "codex":
+        return "WORKFLOW.md"
+    return "SKILL.md"
+
+
+def iter_skill_files(root: Path, entry_name: str = "SKILL.md") -> list[Path]:
+    """Top-level entry files only. Skips SKIP_DIRS."""
     results: list[Path] = []
     for child in sorted(root.iterdir()):
         if not child.is_dir() or child.name in SKIP_DIRS:
             continue
-        skill_md = child / "SKILL.md"
+        skill_md = child / entry_name
         if skill_md.is_file():
             results.append(skill_md)
     return results
@@ -92,12 +107,13 @@ def check_metadata_field(
     root: Path,
     field: str,
     legal_values: set[str] | frozenset[str],
+    entry_name: str = "SKILL.md",
 ) -> list[str]:
     """Return a list of human-readable violation messages, empty if all pass."""
     violations: list[str] = []
-    skills = iter_skill_files(root)
+    skills = iter_skill_files(root, entry_name=entry_name)
     if not skills:
-        violations.append(f"no SKILL.md files found under {root}")
+        violations.append(f"no {entry_name} files found under {root}")
         return violations
     for path in skills:
         try:
@@ -121,7 +137,12 @@ def check_metadata_field(
     return violations
 
 
-def run_lint(field: str, legal_values: set[str] | frozenset[str], ok_message: str) -> int:
+def run_lint(
+    field: str,
+    legal_values: set[str] | frozenset[str],
+    ok_message: str,
+    entry_name: str | None = None,
+) -> int:
     """argparse + check + print + exit-code wrapper used by both check scripts."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -131,11 +152,14 @@ def run_lint(field: str, legal_values: set[str] | frozenset[str], ok_message: st
     )
     args = parser.parse_args()
 
-    violations = check_metadata_field(args.path, field, legal_values)
+    selected_entry = entry_name or codex_entry_name(args.path)
+    violations = check_metadata_field(
+        args.path, field, legal_values, entry_name=selected_entry
+    )
     if violations:
         for v in violations:
             print(f"ERROR: {v}")
         print(f"\n{len(violations)} violation(s) found.", file=sys.stderr)
         return 1
-    print(ok_message)
+    print(ok_message.replace("SKILL.md", selected_entry))
     return 0

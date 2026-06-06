@@ -4,6 +4,30 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [0.1.11] - 2026-06-06
+
+### What's Changed
+- Updated the vendored ARS runtime from
+  `ca5b713d9d802af85d4c74552604b062a618b1c1` (`v3.11.0` plus the first
+  post-tag #310 follow-up fixes) to
+  `2560a072386d4b1a035e5a40ed24ce1edbc0a356` (`v3.11.1`).
+- In plain terms: this brings the Codex package up to the ARS patch release
+  that cleaned up the first wave of post-ship problems after v3.11.0. The main
+  changes are correctness and hardening fixes for citation verification,
+  domain evidence profiles, eval thresholds, policy markers, provenance joins,
+  and edge cases around schema-valid security-boundary inputs.
+- Preserved the Codex packaging layer: one root router skill, vendored
+  workflow entry files named `WORKFLOW.md`, Codex setup/architecture overlays,
+  excluded Claude/plugin loader files, package-specific lint adaptations, and
+  the explicit cross-model consent boundary.
+- Kept local Codex validation runnable on macOS Python 3.9 by avoiding
+  Python-3.11-only standard-library assumptions in the vendored test utilities
+  and by using the active Python executable in adapter subprocess tests.
+
+### Notes
+- No new Codex package feature was added. This is a vendor sync plus metadata
+  release so Codex users get the same v3.11.1 runtime fixes as upstream ARS.
+
 ## [0.1.10] - 2026-06-04
 
 ### Added

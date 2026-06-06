@@ -1,14 +1,14 @@
 {
   "name": "academic-research-suite",
-  "adapter_version": "0.1.10",
+  "adapter_version": "0.1.11",
   "version_file": "VERSION",
   "generated_for": "codex",
-  "generated_date": "2026-06-04",
+  "generated_date": "2026-06-06",
   "source_repositories": [
     {
       "name": "academic-research-skills",
       "url": "https://github.com/Imbad0202/academic-research-skills.git",
-      "commit": "ca5b713d9d802af85d4c74552604b062a618b1c1",
+      "commit": "2560a072386d4b1a035e5a40ed24ce1edbc0a356",
       "included_paths": [
         "deep-research",
         "academic-paper",
@@ -91,9 +91,11 @@
     "docs/SETUP.md, docs/SETUP.zh-TW.md, and docs/ARCHITECTURE.md are Codex-adapted documentation overlays, not verbatim upstream Claude Code docs.",
     "The v3.7.1 pattern-protection validator is patched to resolve git object paths from the nested Codex vendored root.",
     "The spec-consistency validator is patched for the Codex distribution: non-vendored .claude/CLAUDE.md is skipped, excluded showcase PDF links are not treated as broken, and WORKFLOW.md replaces internal SKILL.md entry files.",
+    "The shared metadata linter auto-detects this Codex distribution and validates vendored WORKFLOW.md entry files instead of upstream SKILL.md files.",
     "The Codex package carries scripts/codex_v3_6_7_block_baseline.json so first-time vendored trees can enforce v3.6.7 block byte-equivalence before Git history contains the upstream manifest.",
     "The Codex audit wrapper is patched to run on macOS stock Bash 3.2+ instead of requiring Bash 4+.",
-    "ARS v3.11.0 plus post-tag #310 follow-up fixes is the tracked upstream content; Claude/plugin loader files under .claude, .claude-plugin, and .github remain intentionally excluded.",
+    "Vendored test utilities keep macOS stock Python 3.9 compatibility where Codex local validation depends on it.",
+    "ARS v3.11.1 is the tracked upstream content; Claude/plugin loader files under .claude, .claude-plugin, and .github remain intentionally excluded.",
     "Cross-model API behavior is disabled by default and requires explicit user request."
     ]
 }
