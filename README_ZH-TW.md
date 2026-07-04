@@ -1,6 +1,6 @@
 # Academic Research Skills for Codex
 
-[![Version](https://img.shields.io/badge/version-v0.1.16-blue)](VERSION)
+[![Version](https://img.shields.io/badge/version-v0.1.17-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
@@ -42,7 +42,7 @@ skills/academic-research-suite/
 
 ## 版本控制
 
-此 Codex 套件版本為 `0.1.16`。倉庫根目錄的 `VERSION` 檔案、
+此 Codex 套件版本為 `0.1.17`。倉庫根目錄的 `VERSION` 檔案、
 `skills/academic-research-suite/SKILL.md` 的 metadata 版本，
 以及 `skills/academic-research-suite/manifest.json` 的 `adapter_version`
 獨立追蹤 Codex 套件版本，與內嵌的 ARS 套件版本分開管理。
@@ -51,11 +51,11 @@ skills/academic-research-suite/
 套件層級的變更摘要記錄在 [`CHANGELOG.md`](CHANGELOG.md) 中。
 
 目前內嵌的 ARS 原始碼追蹤至
-`Imbad0202/academic-research-skills@8157a15b3bfad94af5c3ac4d7a79d5a9362622f4`
-（`v3.14.0`）。內嵌的執行時期內容包含 ARS v3.14 的 eval-harness PR
-comment renderer、prompt-debt retirement 更新、七月 harness-retirement audit、
-release 對齊的 README/CITATION/MODE_REGISTRY 表面、更新後的 setup 與
-architecture docs，以及既有 v3.13 portability 與 verification hardening。
+`Imbad0202/academic-research-skills@f86d68a80a6fd05bf51688ff39297ea603eda912`
+（`v3.15.0`）。內嵌的執行時期內容包含 ARS v3.15 的 release-gate
+hardening、command-invariants 與 changelog coverage 檢查、prompt-debt
+retirement round 2、defrift locks、SETUP cross-model parity 檢查，以及
+release-discipline toolkit snapshot。
 
 ## 安裝與更新
 
@@ -251,9 +251,9 @@ ARS 最初是為 Claude Code 撰寫的。在此 Codex 套件中：
 - 如果引用、來源、統計數據或期刊政策無法驗證，Codex 應將其標記為未驗證，
   而非虛構支持內容。
 
-### ARS v3.14 Release 功能對等
+### ARS v3.15 Release 功能對等
 
-本套件旨在與上游 ARS `v3.14.0` 在 Codex 具有對等概念之處，
+本套件旨在與上游 ARS `v3.15.0` 在 Codex 具有對等概念之處，
 提供相同的使用者面向 workflow 內容。
 
 | 上游 ARS 功能 | Codex 套件行為 |

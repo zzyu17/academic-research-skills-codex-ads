@@ -4,6 +4,24 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [0.1.17] - 2026-07-04
+
+### What's Changed
+- Updated the vendored ARS runtime from
+  `8157a15b3bfad94af5c3ac4d7a79d5a9362622f4` (`v3.14.0`) to
+  `f86d68a80a6fd05bf51688ff39297ea603eda912` (`v3.15.0`).
+- Added upstream ARS v3.15 release content, including release-gate hardening,
+  command-invariants and changelog coverage checks, prompt-debt retirement
+  round 2, defrift locks, SETUP cross-model parity checks, and the
+  `tools/release-discipline` snapshot.
+- Preserved Codex packaging behavior: one root router skill, vendored workflow
+  entry files named `WORKFLOW.md`, excluded Claude/plugin loader files,
+  Codex-specific spec-consistency adaptations, Python 3.9 compatibility patches,
+  and the materialized Codex Desktop plugin bundle.
+
+### Notes
+- This sync pins the exact ARS release tag `v3.15.0`.
+
 ## [0.1.16] - 2026-07-02
 
 ### What's Changed
