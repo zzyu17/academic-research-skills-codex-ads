@@ -30,12 +30,12 @@ def codex_manifest() -> dict[str, object]:
 
 
 def is_codex_distribution() -> bool:
-    return codex_manifest().get("generated_for") == "codex"
+    return codex_manifest().get("generated_for") in {"codex", "codex-ads"}
 
 
 def codex_excluded_patterns() -> tuple[str, ...]:
     manifest = codex_manifest()
-    if manifest.get("generated_for") != "codex":
+    if manifest.get("generated_for") not in {"codex", "codex-ads"}:
         return ()
     patterns = manifest.get("excluded_patterns", [])
     if not isinstance(patterns, list):

@@ -1,13 +1,20 @@
-# ARS-Codex
+# ARS-Codex-ADS
 
 [![Version](https://img.shields.io/badge/version-v0.1.21-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
-ARS-Codex is the Codex-native sibling of
+ARS-Codex-ADS is the Codex-native sibling of
 [Academic Research Skills (ARS) for Claude Code](https://github.com/Imbad0202/academic-research-skills).
 It is a separate Codex distribution with its own plugin identity, packaging,
 versioning, and runtime adapter.
+
+This ADS edition adds SAO/NASA Astrophysics Data System and arXiv as primary
+astronomy discovery surfaces, plus bibcode-gated ADS citation verification as
+a fifth resolver. Set `ADS_API_TOKEN` to enable structured ADS access; without
+it, ADS degrades gracefully and the remaining indexes continue. For the
+standard Codex edition, use
+[academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex).
 
 This repository vendors the ARS workflow content as a single Codex skill:
 
@@ -40,7 +47,7 @@ from fresh GitHub clones and adapted through the Codex router in
 
 ## Relationship to Claude Code ARS
 
-This repository is ARS-Codex. For the original Claude Code ARS distribution, use
+This repository is ARS-Codex-ADS. For the original Claude Code ARS distribution, use
 [Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills).
 
 Use the Claude Code repo when you want the native Claude Code skill layout,
@@ -49,7 +56,7 @@ Use this repo when you want the Codex-native single-suite skill.
 
 ## Versioning
 
-This ARS-Codex package is version `0.1.21`. The repo-root `VERSION` file,
+This ARS-Codex-ADS package is version `0.1.21`. The repo-root `VERSION` file,
 `skills/academic-research-suite/SKILL.md` metadata version, and
 `skills/academic-research-suite/manifest.json` `adapter_version` track the
 Codex package version independently of the vendored ARS suite. Vendored upstream
@@ -71,38 +78,38 @@ for traceability and self-tests, but are not repo-level CI or Codex entrypoints;
 Claude/plugin loader files under `.claude/` and `.claude-plugin/` remain
 intentionally excluded.
 
-## Install ARS-Codex Plugin
+## Install ARS-Codex-ADS Plugin
 
-Add the GitHub marketplace and install ARS-Codex with Codex CLI:
+Add the GitHub marketplace and install ARS-Codex-ADS with Codex CLI:
 
 ```bash
-codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main
-codex plugin add ars-codex@ars-codex
+codex plugin marketplace add zzyu17/academic-research-skills-codex-ads --ref main
+codex plugin add ars-codex-ads@ars-codex-ads
 ```
 
 To update a plugin install later:
 
 ```bash
-codex plugin marketplace upgrade ars-codex
-codex plugin add ars-codex@ars-codex
+codex plugin marketplace upgrade ars-codex-ads
+codex plugin add ars-codex-ads@ars-codex-ads
 ```
 
 In Codex Desktop, you can alternatively add the repository from **Plugins** and
-then install **ARS-Codex**:
+then install **ARS-Codex-ADS**:
 
 ```text
-Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
+Marketplace source: https://github.com/zzyu17/academic-research-skills-codex-ads.git
 Branch/ref: main
-Plugin: ars-codex
+Plugin: ars-codex-ads
 ```
 
-The plugin root is `plugins/ars-codex/`. Its `skills/` directory contains a
-materialized copy of `academic-research-suite`, not a symlink. This keeps
+The plugin root is `plugins/ars-codex/`. Its `skills/academic-research-suite/`
+directory contains the materialized `academic-research-suite-ads` skill, not a symlink. This keeps
 Codex Desktop installs portable on Windows, where plugin caches may materialize
 symlinks as plain text files and skip bundled skill registration.
 
 Open a new Codex conversation after installation, then invoke
-`$academic-research-suite` or describe an academic research task that matches
+`$academic-research-suite-ads` or describe an academic research task that matches
 the bundled workflow.
 
 ## Direct Skill Install Or Update
@@ -113,7 +120,7 @@ credentialed GitHub access both work consistently:
 
 ```bash
 python3 "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo Imbad0202/academic-research-skills-codex \
+  --repo zzyu17/academic-research-skills-codex-ads \
   --ref main \
   --path skills/academic-research-suite \
   --method git
@@ -128,7 +135,7 @@ To update an existing install:
 ```bash
 rm -rf "$HOME/.codex/skills/academic-research-suite"
 python3 "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo Imbad0202/academic-research-skills-codex \
+  --repo zzyu17/academic-research-skills-codex-ads \
   --ref main \
   --path skills/academic-research-suite \
   --method git
@@ -138,8 +145,8 @@ Open a new Codex conversation after installation. Existing Codex sessions may
 keep their old skill cache; you do not need to close unrelated Claude or Codex
 sessions.
 
-Verify with `/skills`: you should see one ARS-Codex entry,
-`academic-research-suite` or `ARS-Codex`. You should **not** see separate `academic-paper`,
+Verify with `/skills`: you should see one ARS-Codex-ADS entry,
+`academic-research-suite-ads` or `ARS-Codex-ADS`. You should **not** see separate `academic-paper`,
 `academic-pipeline`, `deep-research`, or `academic-paper-reviewer` skills from
 this package. If you do, reinstall with the update command above and open a new
 Codex conversation.
@@ -156,12 +163,12 @@ Codex conversation.
 
 ## Usage
 
-Invoke the suite explicitly with `$academic-research-suite` (singular), then
+Invoke the suite explicitly with `$academic-research-suite-ads` (singular), then
 describe the research task and provide any source files, notes, draft text,
 reviewer comments, or output constraints.
 
 ```text
-Use $academic-research-suite to help me plan a systematic literature review on
+Use $academic-research-suite-ads to help me plan a systematic literature review on
 AI adoption in higher education quality assurance.
 ```
 
@@ -169,20 +176,20 @@ The Codex adapter routes the request to one of five ARS workflows:
 
 | Workflow | Use when you need | Example prompt |
 |---|---|---|
-| `deep-research` | Research question refinement, literature review, systematic review, meta-analysis, fact-checking | `Use $academic-research-suite to build a systematic review protocol for AI in higher education QA.` |
-| `academic-paper` | Paper outline, drafting, abstract, revision, citation formatting, AI disclosure | `Use $academic-research-suite to turn these notes into an IMRaD paper outline and drafting plan.` |
-| `academic-paper-reviewer` | Manuscript review, simulated peer review, editorial decision, re-review | `Use $academic-research-suite to review this manuscript and produce a journal-style decision letter.` |
-| `academic-pipeline` | End-to-end research-to-paper workflow with integrity gates, review, revision, and final checks | `Use $academic-research-suite to run an end-to-end research-to-paper pipeline from topic to revised manuscript.` |
-| `experiment-agent` | Code experiment planning, human study protocol, statistical interpretation, reproducibility validation | `Use $academic-research-suite to plan a code experiment and define reproducibility checks.` |
+| `deep-research` | Research question refinement, literature review, systematic review, meta-analysis, fact-checking | `Use $academic-research-suite-ads to build a systematic review protocol for AI in higher education QA.` |
+| `academic-paper` | Paper outline, drafting, abstract, revision, citation formatting, AI disclosure | `Use $academic-research-suite-ads to turn these notes into an IMRaD paper outline and drafting plan.` |
+| `academic-paper-reviewer` | Manuscript review, simulated peer review, editorial decision, re-review | `Use $academic-research-suite-ads to review this manuscript and produce a journal-style decision letter.` |
+| `academic-pipeline` | End-to-end research-to-paper workflow with integrity gates, review, revision, and final checks | `Use $academic-research-suite-ads to run an end-to-end research-to-paper pipeline from topic to revised manuscript.` |
+| `experiment-agent` | Code experiment planning, human study protocol, statistical interpretation, reproducibility validation | `Use $academic-research-suite-ads to plan a code experiment and define reproducibility checks.` |
 
 ### Claude-Style Aliases
 
 Claude Code v3.7 installs `/ars-*` slash commands. Codex does not have the same
 plugin command registry, so this package emulates the command intent inside the
-single `$academic-research-suite` skill. Use either form:
+single `$academic-research-suite-ads` skill. Use either form:
 
 ```text
-Use $academic-research-suite: ars-plan my paper on AI governance in universities.
+Use $academic-research-suite-ads: ars-plan my paper on AI governance in universities.
 ```
 
 or, when your Codex client passes slash-prefixed text through as a normal user
@@ -221,7 +228,7 @@ For best results, start with the workflow goal and the current state of your
 materials:
 
 ```text
-Use $academic-research-suite.
+Use $academic-research-suite-ads.
 
 Goal: write a journal article.
 Current materials: I have a literature matrix and rough findings, but no outline.
@@ -234,7 +241,7 @@ clear research question, the Codex router should start with ARS Socratic
 scoping:
 
 ```text
-Use $academic-research-suite.
+Use $academic-research-suite-ads.
 
 I want to write a paper on AI adoption in higher education quality assurance.
 I do not yet have a clear research question.
@@ -249,7 +256,7 @@ For review tasks, provide the manuscript or a path to the manuscript, plus the
 review mode you want:
 
 ```text
-Use $academic-research-suite to review this paper.
+Use $academic-research-suite-ads to review this paper.
 Mode: full review.
 Focus: methodology, contribution, citation integrity, and likely desk-reject risks.
 Output: reviewer reports plus editorial decision letter.
@@ -259,7 +266,7 @@ For staged pipelines, ask for a checkpoint instead of asking Codex to run the
 entire process silently:
 
 ```text
-Use $academic-research-suite to start an academic-pipeline run.
+Use $academic-research-suite-ads to start an academic-pipeline run.
 Begin with Stage 0 intake and stop after producing the pipeline dashboard.
 ```
 
@@ -276,7 +283,7 @@ Expected: one ARS entry only.
 Then test Socratic routing:
 
 ```text
-Use $academic-research-suite.
+Use $academic-research-suite-ads.
 I want to write a paper on AI adoption in higher education quality assurance.
 I do not yet have a clear research question.
 ```
@@ -287,8 +294,8 @@ CLI smoke test:
 
 ```bash
 codex exec --ephemeral --sandbox read-only \
-  -C /path/to/academic-research-skills-codex \
-  'Use $academic-research-suite. Router smoke test only. User request to classify: I want to write a paper on AI adoption in higher education quality assurance, but I do not yet have a clear research question. According to the academic-research-suite router, classify the workflow and mode.'
+  -C /path/to/academic-research-skills-codex-ads \
+  'Use $academic-research-suite-ads. Router smoke test only. User request to classify: I want to write a paper on AI adoption in higher education quality assurance, but I do not yet have a clear research question. According to the academic-research-suite-ads router, classify the workflow and mode.'
 ```
 
 Maintainer quality gates:
@@ -304,9 +311,9 @@ Expected: every reported gate has `"ok": true`.
 These Codex messages do not mean ARS failed to install:
 
 - `[features].codex_hooks is deprecated` — update your Codex config when
-  convenient; ARS-Codex does not require hooks for normal use.
+  convenient; ARS-Codex-ADS does not require hooks for normal use.
 - `hooks need review before they can run` — review those hooks separately if
-  you use them. ARS-Codex treats vendored Claude hooks as traceability metadata
+  you use them. ARS-Codex-ADS treats vendored Claude hooks as traceability metadata
   and does not require them.
 
 ### Codex Adapter Behavior
@@ -351,8 +358,8 @@ ARS was originally written for Claude Code. In this Codex package:
   alone never fail an integrity gate.
 - The upstream v3.18 SessionStart update checker is vendored but not installed
   or executed as a Codex hook. Plugin users update with
-  `codex plugin marketplace upgrade ars-codex` followed by
-  `codex plugin add ars-codex@ars-codex`; direct skill installs still update by
+  `codex plugin marketplace upgrade ars-codex-ads` followed by
+  `codex plugin add ars-codex-ads@ars-codex-ads`; direct skill installs still update by
   reinstalling or pulling this repository.
 - Upstream references to a "fresh Claude Code session" mean a new Codex
   conversation in this package; Material Passport reset semantics still apply.
@@ -366,7 +373,7 @@ This package aims for the same user-facing workflow content as upstream ARS
 
 | Upstream ARS feature | Codex package behavior |
 |---|---|
-| One installable plugin | Native Codex plugin `ars-codex`, bundling the single `academic-research-suite` skill |
+| One installable plugin | Native Codex plugin `ars-codex-ads`, bundling the single `academic-research-suite-ads` skill |
 | `/ars-*` slash commands | Emulated as `ars-*` aliases through the skill router; not native slash commands |
 | Four upstream skills auto-discovered from `skills/` symlinks | Single Codex router skill selects the workflow and reads the vendored workflow `WORKFLOW.md` files |
 | Plugin-shipped agents | Agent files are role/phase prompts; Codex runs them inline unless the user explicitly asks for delegated subagents |
@@ -380,7 +387,7 @@ This package aims for the same user-facing workflow content as upstream ARS
 | Risk-stratified claim, scope, and novelty checks | Vendored workflow prompts and schemas preserve high-impact-first sampling plus advisory-only scope and search-bounded novelty rows |
 | Executable panel/degradation/pipeline-boundary checks | Vendored with their hermetic tests and exposed by the optional full-runtime manifest |
 | SessionStart and SubagentStop hooks, including the update reminder | Vendored for traceability only; Codex does not install or execute Claude hooks |
-| Plugin marketplace update | Refresh with `codex plugin marketplace upgrade ars-codex`, then re-add `ars-codex@ars-codex`; direct skill installs still reinstall or pull |
+| Plugin marketplace update | Refresh with `codex plugin marketplace upgrade ars-codex-ads`, then re-add `ars-codex-ads@ars-codex-ads`; direct skill installs still reinstall or pull |
 | Claude Code Agent Team | Not automatic; Codex subagents require an explicit user request for delegation or parallel agents |
 | Cross-model provider dispatch from upstream docs | Disabled by default; available only with explicit provider configuration and explicit user consent |
 
@@ -397,12 +404,12 @@ export ARS_CROSS_MODEL="gpt-5.5"
 ```
 
 Without both a configured provider and explicit user consent for the content
-class being sent, ARS-Codex falls back to single-runtime review and reports that
+class being sent, ARS-Codex-ADS falls back to single-runtime review and reports that
 cross-model verification was unavailable.
 
 ## Support And Sponsorship
 
-If ARS-Codex helps your research workflow, you can support maintenance through
+If ARS-Codex-ADS helps your research workflow, you can support maintenance through
 [Buy Me a Coffee](https://buymeacoffee.com/crucify020v).
 
 ## Security

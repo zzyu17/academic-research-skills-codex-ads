@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "adapter": {
     "name": "academic-research-suite-codex-full-runtime",
-    "package": "academic-research-suite",
+    "package": "academic-research-suite-ads",
     "profile": "full-runtime",
     "default_enabled": false,
     "enabled_when": {

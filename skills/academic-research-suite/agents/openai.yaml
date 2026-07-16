@@ -1,8 +1,8 @@
 interface:
-  display_name: "ARS-Codex"
-  short_description: "Codex-native research workflows plus ars-* aliases"
+  display_name: "ARS-Codex-ADS"
+  short_description: "Codex-native research workflows plus ars-* aliases, with native support for SAO/NASA ADS."
   brand_color: "#2563EB"
-  default_prompt: "Use $academic-research-suite with ars-plan to map my paper structure and missing evidence."
+  default_prompt: "Use $academic-research-suite-ads to research an astronomy topic with ADS and verify its citations."
 
 policy:
   allow_implicit_invocation: true

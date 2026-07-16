@@ -1,11 +1,11 @@
 {
-  "name": "ars-codex",
+  "name": "ars-codex-ads",
   "interface": {
-    "displayName": "ARS-Codex"
+    "displayName": "ARS-Codex-ADS"
   },
   "plugins": [
     {
-      "name": "ars-codex",
+      "name": "ars-codex-ads",
       "source": {
         "source": "local",
         "path": "./plugins/ars-codex"

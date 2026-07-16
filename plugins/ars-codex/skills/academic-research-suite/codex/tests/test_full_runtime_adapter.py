@@ -25,7 +25,7 @@ def _load_planner():
 def test_vague_paper_topic_routes_to_deep_research_socratic() -> None:
     planner = _load_planner()
     plan = planner.plan_request(
-        "Use $academic-research-suite. I want to write a paper on AI adoption in higher education quality assurance. I do not yet have a clear research question.",
+        "Use $academic-research-suite-ads. I want to write a paper on AI adoption in higher education quality assurance. I do not yet have a clear research question.",
         env={},
     )
     assert plan["workflow"] == "deep-research"
@@ -36,7 +36,7 @@ def test_vague_paper_topic_routes_to_deep_research_socratic() -> None:
 def test_vague_topic_with_unclear_research_question_still_routes_to_socratic() -> None:
     planner = _load_planner()
     plan = planner.plan_request(
-        "Use $academic-research-suite. I want to write a paper on AI governance in universities, but my research question is still unclear.",
+        "Use $academic-research-suite-ads. I want to write a paper on AI governance in universities, but my research question is still unclear.",
         env={},
     )
     assert plan["workflow"] == "deep-research"

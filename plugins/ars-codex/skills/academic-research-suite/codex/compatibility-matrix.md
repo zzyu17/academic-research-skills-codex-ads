@@ -1,4 +1,4 @@
-# ARS-Codex Compatibility Matrix
+# ARS-Codex-ADS Compatibility Matrix
 
 Audit date: 2026-07-18
 
@@ -6,7 +6,7 @@ Audit date: 2026-07-18
 
 | Surface | Evidence |
 |---|---|
-| Codex package repo | `academic-research-skills-codex` current working tree before release commit |
+| Codex package repo | `academic-research-skills-codex-ads` current working tree before release commit |
 | Upstream Claude Code repo | Tracked in `skills/academic-research-suite/manifest.json` |
 | Upstream suite version | `v3.18.0` |
 | Codex package version | `0.1.21` |
@@ -18,7 +18,7 @@ Audit date: 2026-07-18
 
 | Capability | Default Codex Status | Optional Full-Runtime Profile | Parity Level | Implementation Location | Verification Method | Remaining Risk |
 |---|---|---|---|---|---|---|
-| Install / update | Native `ars-codex` plugin from the repo marketplace, with direct skill install retained as an alternative | No change to runtime profile | near | `.agents/plugins/marketplace.json`, `plugins/ars-codex/`, `README.md` | plugin validator; `desktop-plugin-bundle` gate; `/skills` | Marketplace users must refresh the Git snapshot before reinstalling an update |
+| Install / update | Native `ars-codex-ads` plugin from the repo marketplace, with direct skill install retained as an alternative | No change to runtime profile | near | `.agents/plugins/marketplace.json`, `plugins/ars-codex/`, `README.md` | plugin validator; `desktop-plugin-bundle` gate; `/skills` | Marketplace users must refresh the Git snapshot before reinstalling an update |
 | `ars-*` aliases | Root router emulates Claude command intent | Deterministic planner emits the same alias route metadata | near | `SKILL.md`, `codex/full-runtime-manifest.json`, `codex/scripts/ars_codex_full_runtime.py` | adapter pytest; manifest gate | Slash-prefixed input can still be intercepted by a client |
 | Vague paper-topic routing | Root router sends vague paper topics to Socratic scoping | Planner preserves the same override | near | `SKILL.md`, `codex/scripts/ars_codex_full_runtime.py` | adapter pytest; upstream router tests | Natural-language routing is still heuristic outside smoke cases |
 | Agent prompts | `agents/*.md` are read inline as role/phase prompts | `codex/agents/*.md` provides opt-in agent-team templates pointing back to source prompts | near | `ars/*/agents/*.md`, `codex/agents/*.md` | manifest gate; reviewer fixture gate | Actual subagent availability depends on the active Codex runtime |
@@ -42,7 +42,7 @@ Audit date: 2026-07-18
   parsed by the root skill and optional full-runtime planner.
 - Codex full-runtime agent-team mode is opt-in and planner/template based.
   Inline execution remains the default.
-- ARS-Codex has its own native Codex marketplace package; Claude-specific
+- ARS-Codex-ADS has its own native Codex marketplace package; Claude-specific
   plugin commands, slash-command registration, and hook lifecycle are not reproduced.
 - Claude Code `SessionStart` and future `SubagentStop` hooks are not installed
   automatically. The v3.18 update reminder therefore remains inactive; the

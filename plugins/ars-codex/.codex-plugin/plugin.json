@@ -1,13 +1,13 @@
 {
-  "name": "ars-codex",
+  "name": "ars-codex-ads",
   "version": "0.1.21",
-  "description": "ARS-Codex is the Codex-native sibling of Academic Research Skills for deep research, academic writing, manuscript review, research pipelines, and experiment planning.",
+  "description": "ARS-Codex is the Codex-native sibling of Academic Research Skills for deep research, academic writing, manuscript review, research pipelines, and experiment planning, with native support for SAO/NASA ADS.",
   "author": {
-    "name": "Imbad0202",
-    "url": "https://github.com/Imbad0202"
+    "name": "Zhenyu Zhang",
+    "url": "https://github.com/zzyu17"
   },
-  "homepage": "https://github.com/Imbad0202/academic-research-skills-codex",
-  "repository": "https://github.com/Imbad0202/academic-research-skills-codex",
+  "homepage": "https://github.com/zzyu17/academic-research-skills-codex-ads",
+  "repository": "https://github.com/zzyu17/academic-research-skills-codex-ads",
   "license": "CC-BY-NC-4.0",
   "keywords": [
     "academic",
@@ -18,23 +18,27 @@
     "literature-review",
     "manuscript",
     "citation",
-    "deep-research"
+    "deep-research",
+    "astronomy",
+    "astrophysics",
+    "ads",
+    "arxiv"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "ARS-Codex",
-    "shortDescription": "Codex-native research, writing, review, and experiment workflows.",
-    "longDescription": "ARS-Codex is the Codex-native sibling of Academic Research Skills. It supports Socratic research scoping, literature and systematic reviews, IMRaD paper planning and drafting, manuscript revision coaching, peer-review simulation, citation and integrity checks, experiment planning, and staged research-to-paper workflows.",
-    "developerName": "Imbad0202",
+    "displayName": "ARS-Codex-ADS",
+    "shortDescription": "Codex-native research, writing, review, and experiment workflows, with native support for SAO/NASA ADS.",
+    "longDescription": "ARS-Codex is the Codex-native sibling of Academic Research Skills. It supports Socratic research scoping, literature and systematic reviews, IMRaD paper planning and drafting, manuscript revision coaching, peer-review simulation, citation and integrity checks, experiment planning, and staged research-to-paper workflows, with native support for SAO/NASA ADS.",
+    "developerName": "Zhenyu Zhang",
     "category": "Research",
     "capabilities": [
       "Interactive",
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/Imbad0202/academic-research-skills-codex",
-    "privacyPolicyURL": "https://github.com/Imbad0202/academic-research-skills-codex/blob/main/SECURITY.md",
-    "termsOfServiceURL": "https://github.com/Imbad0202/academic-research-skills-codex/blob/main/LICENSE",
+    "websiteURL": "https://github.com/zzyu17/academic-research-skills-codex-ads",
+    "privacyPolicyURL": "https://github.com/zzyu17/academic-research-skills-codex-ads/blob/main/SECURITY.md",
+    "termsOfServiceURL": "https://github.com/zzyu17/academic-research-skills-codex-ads/blob/main/LICENSE",
     "defaultPrompt": [
       "Plan my academic paper from rough research notes.",
       "Review my manuscript like a journal reviewer.",

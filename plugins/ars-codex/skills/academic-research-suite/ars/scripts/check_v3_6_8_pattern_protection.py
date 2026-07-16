@@ -391,7 +391,7 @@ def _is_codex_distribution() -> bool:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
         return False
-    return isinstance(manifest, dict) and manifest.get("generated_for") == "codex"
+    return isinstance(manifest, dict) and manifest.get("generated_for") in {"codex", "codex-ads"}
 
 
 def _load_codex_baseline() -> tuple[dict[str, object] | None, str | None]:

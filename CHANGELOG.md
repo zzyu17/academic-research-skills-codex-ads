@@ -2,7 +2,19 @@
 
 All notable changes to the Codex package are documented here.
 
-## Unreleased
+## [ads] — 2026-07-17
+
+### Added
+- Added the Codex ADS edition with SAO/NASA ADS and arXiv astronomy discovery,
+  a token-authenticated ADS client, bibcode-aware citation verification, and
+  graceful fallback when `ADS_API_TOKEN` is unavailable.
+- Extended the production citation verification summary from four resolvers to
+  five while preserving the existing contamination-finalizer contract.
+
+### Changed
+- Updated Codex marketplace, plugin, router, and end-user documentation for the
+  `ars-codex-ads` plugin and `academic-research-suite-ads` skill identities
+  while preserving their existing filesystem paths.
 
 ## [0.1.21] - 2026-07-18
 

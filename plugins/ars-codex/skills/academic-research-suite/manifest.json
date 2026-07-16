@@ -1,8 +1,8 @@
 {
-  "name": "academic-research-suite",
+  "name": "academic-research-suite-ads",
   "adapter_version": "0.1.21",
   "version_file": "VERSION",
-  "generated_for": "codex",
+  "generated_for": "codex-ads",
   "generated_date": "2026-07-18",
   "source_repositories": [
     {
@@ -86,11 +86,12 @@
     "optional_full_runtime_manifest": "skills/academic-research-suite/codex/full-runtime-manifest.json"
   },
   "runtime_notes": [
+    "This ADS edition overlays the pinned ARS v3.18.0 source with SAO/NASA ADS discovery and a bibcode-gated fifth citation-existence resolver; the upstream source commit remains unchanged.",
     "Claude Code agent-team wording is adapted by SKILL.md into Codex inline role-prompt usage.",
     "The Codex-only codex/ adapter profile is optional and disabled by default; it provides planner metadata, agent-team templates, hook metadata, and quality gates for explicit full-runtime use.",
     "The maintainer's local ARS checkout was not used as a write target.",
     "Upstream slash commands are vendored as prompt recipes and emulated through the Codex SKILL.md alias router; Codex does not register native slash commands.",
-    "Vendored upstream workflow entry files are renamed from SKILL.md to WORKFLOW.md in this Codex package so Codex registers only the root academic-research-suite router skill.",
+    "Vendored upstream workflow entry files are renamed from SKILL.md to WORKFLOW.md in this Codex package so Codex registers only the root academic-research-suite-ads router skill.",
     "Vague paper-topic requests without a clear research question are routed to deep-research socratic mode before outline, drafting, or full pipeline execution.",
     "docs/superpowers/ is intentionally excluded; it contains upstream Claude Code development plans referencing superpowers:* sub-skills which do not exist in the Codex runtime.",
     "User-facing setup docs include reinstall, /skills verification, and Codex CLI smoke-test guidance for existing-session cache behavior.",
@@ -111,8 +112,8 @@
     "The degradation registry, executable panel checker, pipeline-boundary lock, tools-allowlist lock, and hermetic transport fixtures are vendored with their upstream tests; the pipeline-orchestrator content-lock hash is updated only for the Codex WORKFLOW.md path overlay.",
     "The v3.18 fixed-seat cross-model Reviewer 2 track and re-review judge pass remain gated by explicit provider configuration and content consent; dispatch failure or single-family execution is disclosed rather than simulated.",
     "The v3.18 citation-cache staleness advisory, opt-in live re-validation, risk-stratified claim gate, scope and novelty advisories, and held-out pipeline-behavior set are preserved with their upstream tests and schemas.",
-    "The upstream SessionStart update reminder is vendored for traceability and testing but is not installed or executed by Codex; plugin users update by refreshing the ars-codex marketplace and re-adding the plugin, while direct skill users reinstall manually.",
-    "ARS-Codex Desktop plugin packaging uses a materialized skills directory under plugins/ars-codex/skills instead of a symlink so Windows plugin caches can register the bundled academic-research-suite skill.",
+    "The upstream SessionStart update reminder is vendored for traceability and testing but is not installed or executed by Codex; plugin users update by refreshing the ars-codex-ads marketplace and re-adding the plugin, while direct skill users reinstall manually.",
+    "ARS-Codex-ADS Desktop plugin packaging uses a materialized skills directory under plugins/ars-codex/skills instead of a symlink so Windows plugin caches can register the bundled academic-research-suite-ads skill.",
     "Cross-model API behavior is disabled by default and requires explicit user request, provider configuration, and user consent before any external upload."
     ]
 }

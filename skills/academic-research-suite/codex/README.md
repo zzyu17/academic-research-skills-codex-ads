@@ -1,7 +1,7 @@
-# ARS-Codex Full-Runtime Adapter
+# ARS-Codex-ADS Full-Runtime Adapter
 
 This directory is the Codex-only runtime adapter for
-`academic-research-suite`. Vendored upstream content remains under `ars/`; do
+`academic-research-suite-ads`. Vendored upstream content remains under `ars/`; do
 not hand-edit it except through an explicit upstream sync or documented path
 patch.
 
@@ -10,7 +10,7 @@ patch.
 Default behavior remains inline:
 
 ```text
-Use $academic-research-suite: ars-plan ...
+Use $academic-research-suite-ads: ars-plan ...
 ```
 
 The root router reads the relevant `ars/*/WORKFLOW.md` and agent prompt files,

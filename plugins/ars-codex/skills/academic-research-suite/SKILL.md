@@ -1,5 +1,5 @@
 ---
-name: academic-research-suite
+name: academic-research-suite-ads
 description: >
   ARS-Codex workflows for research, academic writing, manuscript review,
   research-to-paper pipelines, and experiment planning. Use when the user asks for deep research, literature
@@ -13,7 +13,7 @@ description: >
   /ars-citation-check, /ars-disclosure, /ars-format-convert, /ars-3w,
   /ars-revision-coach, /ars-revision, /ars-reviewer, /ars-mark-read,
   /ars-unmark-read, /ars-cache-invalidate, /ars-rebuttal-audit, and /ars-full. This skill vendors ARS role prompts,
-  references, templates, and shared handoff schemas under ars/.
+  references, templates, and shared handoff schemas under ars/, with native support for SAO/NASA ADS.
 metadata:
   version: "0.1.21"
   upstream_suite: "academic-research-skills"
@@ -21,7 +21,7 @@ metadata:
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
 ---
 
-# ARS-Codex
+# ARS-Codex-ADS
 
 This is a Codex adapter for the ARS suite. The vendored ARS content lives under
 `ars/`; keep it as source material and route through this file first.
@@ -154,6 +154,7 @@ using them in Codex:
 | `ARS_CROSS_MODEL`, `ARS_CROSS_MODEL_REASONING_EFFORT`, `ARS_OPENAI_COMPAT_BASE_URL`, `ARS_OPENAI_COMPAT_API_KEY` | Treat upstream secondary-model dispatch instructions as no-op unless the user explicitly asks for cross-model review. When explicitly enabled in this Codex package, follow `ars/shared/cross_model_verification.md`: identify the provider/model/id status/content class, obtain explicit user consent before any external upload, preserve risk-stratified sampling and blind-disagreement checkpoint rules, and call only the configured provider API. A dispatched owner emits the canonical `[CROSS-MODEL-HANDOFF v1]` envelope; the dispatching Codex context validates it, sends only the payload, applies the mechanical result routing, and returns judgment work to the owner. In reviewer `full` mode, the consented cross-model track swaps the existing Reviewer 2 seat rather than adding a reviewer; re-review runs the independent Priority-1 judge pass and records the Judge Record. Disclose single-family or fallback execution and never simulate either track through the active Codex model. |
 | `S2_API_KEY`, `OPENALEX_API_KEY`, `OPENALEX_POLITE_EMAIL`, `CROSSREF_POLITE_EMAIL` | These are optional upstream bibliographic lookup settings. Use them only when the user explicitly runs contamination-signal migration or programmatic reference verification; normal Codex routing does not require them. Never log credential-bearing query strings, and do not use browser retrieval to bypass API rate limits. |
 | `ARS_VERIFICATION_CACHE_PATH`, `ARS_CACHE_STALE_ADVISORY_DAYS`, `ARS_CACHE_REVALIDATE` | These configure the local SQLite citation-verification cache, the advisory-only stale-row threshold (default 30 days; `0` disables), and opt-in live re-validation. Preserve cached-by-default behavior when the programmatic citation gate is run. Live re-validation may call external bibliographic services, so use it only within the user's verification task and normal network/credential boundaries; an advisory never becomes a gate failure. |
+| `ADS_API_TOKEN` | Optional credential for structured SAO/NASA ADS discovery and bibcode verification in astronomy or astrophysics workflows. If absent or invalid, record ADS as skipped or unreachable and continue with the other bibliographic indexes. Never print or persist the token. |
 | `fresh Claude Code session`, `Claude Code session` | Read as "a new Codex conversation". Material Passport reset semantics still apply; only the runtime changes. This rule covers `ars/academic-pipeline/WORKFLOW.md`, `ars/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `ars/academic-pipeline/references/passport_as_reset_boundary.md`, `ars/experiment-agent/README.md`, `ars/experiment-agent/README.zh-TW.md`, and `ars/docs/PERFORMANCE.md`. |
 | `/ars-*` slash command, Claude plugin command | Treat `ars/commands/ars-*.md` as optional prompt recipes. Codex does not register slash commands from this package. |
 | SessionStart hook, SubagentStop hook, `hooks/hooks.json`, `scripts/ars_update_check.sh` | Treat as upstream Claude Code hook metadata only. The v3.18 update checker is vendored for traceability and tests but is not installed or executed by Codex; Codex package updates remain manual unless the user explicitly asks to port hook behavior. |
@@ -183,7 +184,7 @@ provider, content, credential, and consent checks.
 
 ## Optional Full-Runtime Profile
 
-Normal ARS-Codex behavior remains inline role-prompt execution in this
+Normal ARS-Codex-ADS behavior remains inline role-prompt execution in this
 conversation. The Codex-only `codex/` directory provides an optional
 full-runtime profile for users who explicitly want planner-driven agent-team or
 hook behavior:

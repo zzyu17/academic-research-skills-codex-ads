@@ -98,7 +98,7 @@ class AdsClient:
     def __init__(self) -> None:
         self._min_interval = _ADS_MIN_INTERVAL
         self._last_request_at: float | None = None
-        self._user_agent = "ARS-v3.16-ADS"
+        self._user_agent = "ARS-v3.18-ADS"
         self._token = os.environ.get("ADS_API_TOKEN", "")
 
     def _throttle(self) -> None:

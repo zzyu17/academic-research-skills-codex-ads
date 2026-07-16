@@ -1087,7 +1087,7 @@ class ResolveArxivQueriedByTest(unittest.TestCase):
 
 
 class ResolveAdsUnmatchedTest(unittest.TestCase):
-    """ADS resolver behavior and v3.16 cache integration."""
+    """ADS resolver behavior and v3.17 cache integration."""
 
     def _entry(self, **overrides):
         base = {
