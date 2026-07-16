@@ -36,7 +36,7 @@ except ImportError:  # pragma: no cover
 
 
 def _real_clients() -> dict:
-    """Construct the four production resolver clients. Imported lazily so the
+    """Construct the five production resolver clients. Imported lazily so the
     CLI module loads without network deps and tests can inject a stub factory.
     Dual-path import: under `python -m scripts.verify_passport` the repo root is
     on sys.path (not scripts/), so the bare imports fall back to scripts.*."""
@@ -44,17 +44,20 @@ def _real_clients() -> dict:
         from crossref_client import CrossrefClient
         from openalex_client import OpenAlexClient
         from arxiv_client import ArxivClient
+        from ads_client import AdsClient
         from semantic_scholar_client import SemanticScholarClient
     except ImportError:  # pragma: no cover - exercised via `python -m`
         from scripts.crossref_client import CrossrefClient
         from scripts.openalex_client import OpenAlexClient
         from scripts.arxiv_client import ArxivClient
+        from scripts.ads_client import AdsClient
         from scripts.semantic_scholar_client import SemanticScholarClient
     return {
         "crossref": CrossrefClient(),
         "openalex": OpenAlexClient(),
         "semantic_scholar": SemanticScholarClient(),
         "arxiv": ArxivClient(),
+        "ads": AdsClient(),
     }
 
 

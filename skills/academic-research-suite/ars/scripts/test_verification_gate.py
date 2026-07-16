@@ -3,7 +3,7 @@
 
 Spec: docs/design/2026-05-21-v3.10-182-promote-citation-gate-spec.md §2 Delta 5.
 
-verify_citation composes the four resolvers, maps each resolver's execution to a
+verify_citation composes five resolvers, maps each resolver's execution to a
 {status, queried_by} outcome, derives lookup_verified via the Delta 4 reducer
 (narrowed-false, C-V6(a)), reads anchor_present, and stamps verification_timestamp.
 Clients are dependency-injected so tests run without network.
@@ -56,7 +56,7 @@ def _entry(**overrides):
 _PAGE_ANCHOR = {"kind": "page", "value": "1"}
 
 
-def _clients(*, crossref=None, openalex=None, semantic_scholar=None, arxiv=None):
+def _clients(*, crossref=None, openalex=None, semantic_scholar=None, arxiv=None, ads=None):
     """Build a clients dict of MagicMocks. Pass a configured mock per resolver,
     or None to get a default (all lookups miss)."""
     def default():
@@ -64,6 +64,7 @@ def _clients(*, crossref=None, openalex=None, semantic_scholar=None, arxiv=None)
         m.doi_lookup_with_title_check.return_value = None
         m.title_search.return_value = None
         m.arxiv_id_lookup.return_value = None
+        m.bibcode_lookup.return_value = None
         m.lookup.return_value = {"matched": False}
         return m
     return {
@@ -71,6 +72,7 @@ def _clients(*, crossref=None, openalex=None, semantic_scholar=None, arxiv=None)
         "openalex": openalex or default(),
         "semantic_scholar": semantic_scholar or default(),
         "arxiv": arxiv or default(),
+        "ads": ads or default(),
     }
 
 
@@ -123,19 +125,21 @@ def test_all_unreachable_is_unresolvable():
     from crossref_client import CrossrefUnavailable
     from openalex_client import OpenAlexUnavailable
     from arxiv_client import ArxivUnavailable
+    from ads_client import AdsUnavailable
     from contamination_signals import SemanticScholarUnavailable
 
     cr = MagicMock(); cr.doi_lookup_with_title_check.side_effect = CrossrefUnavailable("x")
     oa = MagicMock(); oa.doi_lookup_with_title_check.side_effect = OpenAlexUnavailable("x")
     s2 = MagicMock(); s2.lookup.side_effect = SemanticScholarUnavailable("x")
     ax = MagicMock(); ax.arxiv_id_lookup.side_effect = ArxivUnavailable("x")
+    ads = MagicMock(); ads.bibcode_lookup.side_effect = AdsUnavailable("x")
     outcome = verify_citation(
-        _entry(arxiv_id="1706.03762"),
-        _clients(crossref=cr, openalex=oa, semantic_scholar=s2, arxiv=ax),
+        _entry(arxiv_id="1706.03762", bibcode="2020A&A...641A...6P"),
+        _clients(crossref=cr, openalex=oa, semantic_scholar=s2, arxiv=ax, ads=ads),
         ref_slug=_DEFAULT_REF_SLUG,
     )
     assert outcome["lookup_verified"] == "unresolvable"
-    for r in ("crossref", "openalex", "semantic_scholar", "arxiv"):
+    for r in ("crossref", "openalex", "semantic_scholar", "arxiv", "ads"):
         assert outcome["resolver_outcomes"][r]["status"] == "unreachable"
 
 
@@ -143,7 +147,7 @@ def test_manual_entry_all_skipped_unresolvable():
     from verification_gate import verify_citation
     outcome = verify_citation(_entry(obtained_via="manual"), _clients(), ref_slug=_DEFAULT_REF_SLUG)
     assert outcome["lookup_verified"] == "unresolvable"
-    for r in ("crossref", "openalex", "semantic_scholar", "arxiv"):
+    for r in ("crossref", "openalex", "semantic_scholar", "arxiv", "ads"):
         assert outcome["resolver_outcomes"][r]["status"] == "skipped"
 
 
@@ -152,6 +156,25 @@ def test_arxiv_skipped_on_non_arxiv_citation():
     cr = MagicMock(); cr.doi_lookup_with_title_check.return_value = {"title": ["X"]}
     outcome = verify_citation(_entry(), _clients(crossref=cr), ref_slug=_DEFAULT_REF_SLUG)  # no arxiv_id
     assert outcome["resolver_outcomes"]["arxiv"]["status"] == "skipped"
+
+
+def test_ads_is_bibcode_gated_and_can_match():
+    from verification_gate import verify_citation
+
+    matched = MagicMock()
+    matched.bibcode_lookup.return_value = {"title": "X", "year": 2020}
+    outcome = verify_citation(
+        _entry(bibcode="2020A&A...641A...6P"),
+        _clients(ads=matched),
+        ref_slug=_DEFAULT_REF_SLUG,
+    )
+    assert outcome["resolver_outcomes"]["ads"]["status"] == "matched"
+    assert outcome["resolver_outcomes"]["ads"]["queried_by"] == "id"
+
+    skipped = verify_citation(
+        _entry(), _clients(), ref_slug=_DEFAULT_REF_SLUG
+    )
+    assert skipped["resolver_outcomes"]["ads"]["status"] == "skipped"
 
 
 def test_anchor_present_true_for_page_kind():

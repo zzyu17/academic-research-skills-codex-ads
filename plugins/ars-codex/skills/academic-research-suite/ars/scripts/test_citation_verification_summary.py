@@ -40,7 +40,7 @@ def validator(schema):
 
 
 def _entry(**overrides):
-    # Production-shaped: all four resolver keys present (the summary contract is
+    # Production-shaped: all five resolver keys present (the summary contract is
     # fully-populated; absent != skipped). crossref matched, the rest skipped.
     base = {
         "citation_key": "vaswani2017",
@@ -57,6 +57,8 @@ def _entry(**overrides):
                                  "response_summary": None},
             "arxiv": {"status": "skipped", "queried_by": None,
                       "response_summary": None},
+            "ads": {"status": "skipped", "queried_by": None,
+                    "response_summary": None},
         },
     }
     base.update(overrides)
@@ -64,9 +66,9 @@ def _entry(**overrides):
 
 
 def _full_ro(**overrides):
-    """All four resolver keys, default skipped/null; override individual ones."""
+    """All five resolver keys, default skipped/null; override individual ones."""
     ro = {r: {"status": "skipped", "queried_by": None, "response_summary": None}
-          for r in ("crossref", "openalex", "semantic_scholar", "arxiv")}
+          for r in ("crossref", "openalex", "semantic_scholar", "arxiv", "ads")}
     ro.update(overrides)
     return ro
 
@@ -136,7 +138,7 @@ def test_resolver_outcomes_closed_to_four_resolvers(validator):
 
 
 def test_resolver_outcomes_requires_all_four_resolver_keys(validator):
-    """The summary contract is fully-populated: all four resolver keys must be
+    """The summary contract is fully-populated: all five resolver keys must be
     present (each carrying its own status, incl. 'skipped'), so a consumer never
     has to disambiguate 'absent key' from 'resolver did not run'. A partial
     resolver_outcomes object is a contract violation."""
@@ -152,7 +154,7 @@ def test_resolver_outcome_requires_queried_by(validator):
     pure-unreachable)."""
     bad_ro = {r: {"status": "skipped", "queried_by": None,
                   "response_summary": None}
-              for r in ("crossref", "openalex", "semantic_scholar", "arxiv")}
+              for r in ("crossref", "openalex", "semantic_scholar", "arxiv", "ads")}
     # drop queried_by from one outcome
     del bad_ro["crossref"]["queried_by"]
     bad = _entry(lookup_verified="unresolvable", resolver_outcomes=bad_ro)

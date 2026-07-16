@@ -56,6 +56,11 @@
       "pattern": "^([A-Za-z][A-Za-z0-9-]*(\\.[A-Za-z0-9-]+)*/\\d{7}(v[1-9]\\d*)?|\\d{4}\\.\\d{4,5}(v[1-9]\\d*)?)$",
       "description": "Optional arXiv identifier for arXiv-hosted works. Accepts legacy IDs such as 'hep-th/9711200', 'math.AG/0703087', and new-style IDs such as '2401.12345' or '2401.12345v2'."
     },
+    "bibcode": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional SAO/NASA ADS bibcode. Its presence enables the bibcode-gated ADS resolver."
+    },
     "tags": {
       "type": "array",
       "items": {
@@ -146,7 +151,7 @@
     "contamination_signals": {
       "type": "object",
       "additionalProperties": false,
-      "description": "v3.7.3 + v3.9.0 + v3.11 contaminated-source advisory field (spec v3.7.3 §3.2 + v3.9.0 §3.4–§3.5 + v3.11 #182 Delta 1). Up to five optional boolean signals computed at ingest time by bibliography_agent: v3.7.3 Vector 1 (preprint_post_llm_inflection — heuristic), v3.7.3 Vector 2 (semantic_scholar_unmatched — S2 lookup), v3.9.0 (openalex_unmatched + crossref_unmatched — triangulation extension), v3.11 (arxiv_unmatched — four-index triangulation extension). Surfaces at cite-time finalizer as CONTAMINATED-... marker annotation suffix; advisory only — does NOT block emission. Absence of the object means signals were not computed (legacy entries or check skipped). Presence with all populated *_unmatched fields false means lookup-based contamination evidence is absent for the queried indexes; `preprint_post_llm_inflection: true` is an independent contamination signal that remains active regardless of lookup field values. Manual entries are exempt from the four lookup fields per spec v3.9.0 §3.1 + v3.11 not-rule but still carry preprint_post_llm_inflection (heuristic). External motivation: Zhao et al. arXiv:2605.07723 (2026-05) documents post-2024-mid hallucination inflection in preprint corpora and §3 cross-index triangulation as viable false-positive reduction.",
+      "description": "Contaminated-source advisory fields computed at ingest time. The preprint heuristic is independent of the four historical bibliographic-index unmatched signals: Semantic Scholar, OpenAlex, Crossref, and arXiv. ADS verification is recorded separately in citation_verification_summary[]. Missing fields mean skipped or unavailable, not a negative confirmation. Manual entries are exempt from every *_unmatched lookup field.",
       "properties": {
         "preprint_post_llm_inflection": {
           "type": "boolean",
@@ -333,7 +338,7 @@
       }
     },
     {
-      "description": "v3.9.0 spec §3.1 extends v3.7.3 §3.2 manual-entry exemption (codex round-3 F11 closure) symmetrically; v3.11 #182 Delta 1 extends it further to arxiv_unmatched: when obtained_via='manual' the bibliography_agent SKIPS all four lookups (Semantic Scholar / OpenAlex / Crossref / arXiv) and OMITS the four *_unmatched fields. The schema enforces this contract: a manual entry MUST NOT carry any of semantic_scholar_unmatched / openalex_unmatched / crossref_unmatched / arxiv_unmatched. Setting any to true on a manual entry would surface CONTAMINATED-* on a user-vouched reference. The asymmetry: preprint_post_llm_inflection IS still computed for manual entries (pure heuristic, no lookup) and is not in the exemption scope.",
+      "description": "Manual entries skip every contamination lookup and must omit all four *_unmatched fields. The independent preprint heuristic remains allowed; ADS is represented in citation_verification_summary[].",
       "if": {
         "properties": {
           "obtained_via": {

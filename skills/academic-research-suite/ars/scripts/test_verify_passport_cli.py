@@ -36,10 +36,11 @@ def _no_network_clients():
         m.doi_lookup_with_title_check.return_value = None
         m.title_search.return_value = None
         m.arxiv_id_lookup.return_value = None
+        m.bibcode_lookup.return_value = None
         m.lookup.return_value = {"matched": False}
         return m
     return {n: default() for n in
-            ("crossref", "openalex", "semantic_scholar", "arxiv")}
+            ("crossref", "openalex", "semantic_scholar", "arxiv", "ads")}
 
 
 def _entry(**overrides):

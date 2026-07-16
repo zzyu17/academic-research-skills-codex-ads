@@ -120,6 +120,8 @@ For every source in the bibliography, query the Semantic Scholar API:
 
 **Graceful degradation**: If S2 API is unavailable, skip Tier 0 and proceed with Tier 1 + Tier 2 as before. Log `[S2-API-UNAVAILABLE]` in the audit trail.
 
+**Astronomy supplement — ADS bibcode verification:** For astronomy and astrophysics sources carrying an ADS bibcode, also verify the bibcode and title through the ADS API using `references/ads_api_protocol.md`. Record a successful match as strong programmatic evidence; investigate an ADS miss alongside the other indexes rather than treating a single-index miss as conclusive. If `ADS_API_TOKEN` is absent or ADS is degraded, record `ADS_SKIPPED` and continue.
+
 #### Tier 1: Automated DOI Verification (100% coverage)
 - Every source with a DOI → verify via `https://doi.org/{doi}` resolution
 - Check: DOI resolves to a real page, title matches, authors match

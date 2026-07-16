@@ -1084,3 +1084,95 @@ class ResolveArxivQueriedByTest(unittest.TestCase):
         self.assertIs(unmatched, False)
         self.assertEqual(matched_by, "arxiv")
         self.assertEqual(queried_by, "id")
+
+
+class ResolveAdsUnmatchedTest(unittest.TestCase):
+    """ADS resolver behavior and v3.16 cache integration."""
+
+    def _entry(self, **overrides):
+        base = {
+            "citation_key": "planck2020",
+            "title": "Planck 2018 results. VI. Cosmological parameters",
+            "bibcode": "2020A&A...641A...6P",
+            "year": 2020,
+            "obtained_via": "folder-scan",
+        }
+        return base | overrides
+
+    def test_bibcode_match(self):
+        client = MagicMock()
+        client.bibcode_lookup.return_value = {"title": "Planck", "year": 2020}
+        self.assertIs(cs.resolve_ads_unmatched(self._entry(), client), False)
+        client.title_search.assert_not_called()
+
+    def test_ads_database_name_is_not_a_preprint_venue(self):
+        entry = {"year": 2025, "venue": "ADS"}
+        self.assertIs(cs.compute_preprint_signal(entry), False)
+
+    def test_bibcode_miss_falls_back_to_title_with_year(self):
+        client = MagicMock()
+        client.bibcode_lookup.return_value = None
+        client.title_search.return_value = {"title": "Planck", "year": 2020}
+        self.assertIs(cs.resolve_ads_unmatched(self._entry(), client), False)
+        client.title_search.assert_called_once_with(
+            self._entry()["title"], year=2020
+        )
+
+    def test_no_match(self):
+        client = MagicMock()
+        client.bibcode_lookup.return_value = None
+        client.title_search.return_value = None
+        self.assertIs(cs.resolve_ads_unmatched(self._entry(), client), True)
+
+    def test_manual_and_missing_bibcode_skip_without_network(self):
+        for entry in (
+            self._entry(obtained_via="manual"),
+            self._entry(bibcode=None),
+        ):
+            client = MagicMock()
+            self.assertIsNone(cs.resolve_ads_unmatched(entry, client))
+            client.bibcode_lookup.assert_not_called()
+            client.title_search.assert_not_called()
+
+    def test_degradation_propagates(self):
+        from ads_client import AdsUnavailable
+
+        client = MagicMock()
+        client.bibcode_lookup.side_effect = AdsUnavailable("down")
+        with self.assertRaises(AdsUnavailable):
+            cs.resolve_ads_unmatched(self._entry(), client)
+
+    def test_cache_hit_skips_network(self):
+        client = MagicMock()
+        query_form = (
+            "bibcode:2020A&A...641A...6P|title:"
+            "Planck 2018 results. VI. Cosmological parameters"
+        )
+        cache = _FakeCache(seed={
+            ("planck2020", "ads", query_form): {
+                "matched": True,
+                "matched_by": "ads",
+                "decision_version": cs.RESOLVER_DECISION_VERSION,
+            }
+        })
+        self.assertIs(
+            cs.resolve_ads_unmatched(self._entry(), client, cache=cache),
+            False,
+        )
+        client.bibcode_lookup.assert_not_called()
+
+    def test_cache_miss_populates_current_decision_version(self):
+        client = MagicMock()
+        client.bibcode_lookup.return_value = None
+        client.title_search.return_value = None
+        cache = _FakeCache()
+        self.assertIs(
+            cs.resolve_ads_unmatched(self._entry(), client, cache=cache),
+            True,
+        )
+        self.assertEqual(len(cache.put_calls), 1)
+        _, resolver, _, response = cache.put_calls[0]
+        self.assertEqual(resolver, "ads")
+        self.assertEqual(
+            response["decision_version"], cs.RESOLVER_DECISION_VERSION
+        )

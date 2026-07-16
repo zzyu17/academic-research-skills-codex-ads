@@ -32,6 +32,11 @@ try:
 except ImportError:
     from scripts.arxiv_client import ArxivUnavailable
 
+try:
+    from ads_client import AdsUnavailable
+except ImportError:
+    from scripts.ads_client import AdsUnavailable
+
 
 # #431 §0.12.3b — the resolver-decision logic version, stored under the
 # "decision_version" key in each cached verdict value (spec-preferred form: no
@@ -512,6 +517,47 @@ def resolve_arxiv_unmatched(
             title=entry.get("title", ""),
         ),
         compute=lambda: _resolve_arxiv_id_then_title(entry, client),
+    )
+
+
+def _resolve_ads_bibcode_then_title(
+    entry: Mapping[str, Any], client,
+) -> tuple[bool, str | None, str]:
+    """Resolve an ADS entry by bibcode, then fall back to title search."""
+    title = entry.get("title", "")
+    queried_by = queried_by_for(entry, id_field="bibcode")
+    hit = client.bibcode_lookup(entry.get("bibcode"), title)
+    if hit is not None:
+        return False, "ads", queried_by
+    hit = client.title_search(title, year=entry.get("year"))
+    if hit is not None:
+        return False, "title", queried_by
+    return True, None, queried_by
+
+
+def resolve_ads_unmatched(
+    entry: Mapping[str, Any], client, *, cache=None,
+) -> bool | None:
+    """Compute the bibcode-gated ADS unmatched signal.
+
+    Manual entries and citations without a bibcode are outside this resolver's
+    applicability and return None. API degradation raises AdsUnavailable so the
+    caller can omit the field without treating absence as a negative match.
+    """
+    if entry.get("obtained_via") == "manual":
+        return None
+    if not entry.get("bibcode"):
+        return None
+    return _cached_verdict(
+        cache=cache,
+        citation_key=entry.get("citation_key"),
+        resolver_name="ads",
+        query_form=_query_form(
+            id_label="bibcode",
+            id_value=entry.get("bibcode"),
+            title=entry.get("title", ""),
+        ),
+        compute=lambda: _resolve_ads_bibcode_then_title(entry, client),
     )
 
 

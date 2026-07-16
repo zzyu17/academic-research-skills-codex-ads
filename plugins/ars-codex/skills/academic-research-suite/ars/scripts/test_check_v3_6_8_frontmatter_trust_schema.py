@@ -532,6 +532,11 @@ def test_v3_11_manual_entry_with_arxiv_unmatched_fails(validator) -> None:
     )
 
 
+def test_ads_bibcode_validates(validator) -> None:
+    entry = _minimal_entry(bibcode="2020A&A...641A...6P")
+    assert list(validator.iter_errors(entry)) == []
+
+
 def test_v3_11_manual_entry_not_rule_covers_v3_9_0_triplet(validator) -> None:
     """Regression guard for the pre-existing v3.9.0 not-rule members — the
     extension must not drop coverage of s2 / openalex / crossref."""

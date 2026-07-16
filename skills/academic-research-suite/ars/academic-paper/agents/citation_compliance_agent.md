@@ -411,6 +411,7 @@ Quality gate not passed ->
 - **Receiving draft_writer_agent's Draft**: Reference List must exist as an independent section (`## References`)
 - **Output to formatter_agent**: Corrected Reference List must already be sorted by target format (APA/MLA = alphabetical, IEEE/Vancouver = order of appearance)
 - **Cross-verification with literature_strategist_agent**: Each source in the Annotated Bibliography is the ground truth. If citation information in the Draft differs from the Bibliography -> correct using Bibliography as authoritative source
+- **Cross-verification with ADS (Astronomy)**: For astronomy and astrophysics references carrying an ADS bibcode, verify bibliographic metadata against ADS. Treat the bibcode as authoritative for the indexed ADS record, document corrections, and continue normal cross-index checks.
 
 ## Quality Criteria
 

@@ -7,7 +7,7 @@ Public functions:
   - verify_passport(passport, clients, *, ref_slug_by_key, anchors=None,
         cache=None) -> list[outcome]
 
-Composes the four resolvers (crossref / openalex / semantic_scholar / arxiv),
+Composes five resolvers (crossref / openalex / semantic_scholar / arxiv / ADS),
 maps each resolver's execution to a {status, queried_by} outcome, derives the
 3-class lookup_verified via the Delta 4 reducer (narrowed-false, C-V6(a)),
 reads anchor_present from the v3.7.3 anchor marker, and stamps
@@ -37,8 +37,10 @@ try:
     from crossref_client import CrossrefUnavailable
     from openalex_client import OpenAlexUnavailable
     from arxiv_client import ArxivUnavailable
+    from ads_client import AdsUnavailable
     from contamination_signals import (
         SemanticScholarUnavailable,
+        _resolve_ads_bibcode_then_title,
         _resolve_arxiv_id_then_title,
         _resolve_doi_then_title,
         queried_by_for,
@@ -58,8 +60,10 @@ except ImportError:  # pragma: no cover - dual-path import
     from scripts.crossref_client import CrossrefUnavailable
     from scripts.openalex_client import OpenAlexUnavailable
     from scripts.arxiv_client import ArxivUnavailable
+    from scripts.ads_client import AdsUnavailable
     from scripts.contamination_signals import (
         SemanticScholarUnavailable,
+        _resolve_ads_bibcode_then_title,
         _resolve_arxiv_id_then_title,
         _resolve_doi_then_title,
         queried_by_for,
@@ -178,6 +182,19 @@ def _run_arxiv(
     return _ran_outcome(unmatched, queried_by), from_cache
 
 
+def _run_ads(entry, client) -> tuple[dict[str, Any], bool]:
+    """ADS is applicable only to citations carrying an ADS bibcode."""
+    if not entry.get("bibcode"):
+        return _outcome(STATUS_SKIPPED, None), False
+    try:
+        unmatched, _matched_by, queried_by = _resolve_ads_bibcode_then_title(
+            entry, client
+        )
+    except AdsUnavailable:
+        return _outcome(STATUS_UNREACHABLE, None), False
+    return _ran_outcome(unmatched, queried_by), False
+
+
 def _anchor_present(anchor: Any) -> bool:
     """True iff the v3.7.3 anchor marker has kind ∈ {quote,page,section,paragraph}
     (not none). `anchor` is the already-parsed {kind, value} marker sourced from
@@ -198,11 +215,11 @@ def verify_citation(
     cache=_UNSET,
     revalidate_stale=_UNSET,
 ) -> dict[str, Any]:
-    """Verify one citation's existence across the four resolvers.
+    """Verify one citation's existence across five resolvers.
 
     `entry` carries citation_key, title, authors, year, source_pointer, optional
-    doi / arxiv_id, obtained_via. `clients` is a mapping {crossref, openalex,
-    semantic_scholar, arxiv} of resolver clients (injected so callers control
+    doi / arxiv_id / bibcode, obtained_via. `clients` is a mapping {crossref,
+    openalex, semantic_scholar, arxiv, ads} of resolver clients (injected so callers control
     network / cache).
 
     `ref_slug` is the writer-prose `<!--ref:slug-->` marker this citation renders
@@ -246,11 +263,11 @@ def verify_citation(
             f"got {ref_slug!r}; corpus entries do not carry ref_slug (#332)"
         )
     if entry.get("obtained_via") == "manual":
-        # v3.7.3 manual exemption: no resolver runs — all four skipped (checked
+        # Manual exemption: no resolver runs — all five skipped (checked
         # once here rather than re-checked inside each resolver helper).
         resolver_outcomes = {
             r: _outcome(STATUS_SKIPPED, None)
-            for r in ("crossref", "openalex", "semantic_scholar", "arxiv")
+            for r in ("crossref", "openalex", "semantic_scholar", "arxiv", "ads")
         }
         any_from_cache = False
     else:
@@ -269,6 +286,7 @@ def verify_citation(
             "arxiv": _run_arxiv(
                 entry, clients["arxiv"], cache=cache,
                 bypass_stale=revalidate_stale),
+            "ads": _run_ads(entry, clients["ads"]),
         }
         resolver_outcomes = {name: oc for name, (oc, _fc) in ran.items()}
         any_from_cache = any(fc for _oc, fc in ran.values())

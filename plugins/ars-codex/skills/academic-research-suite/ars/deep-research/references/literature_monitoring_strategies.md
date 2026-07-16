@@ -152,6 +152,34 @@ RSS (Really Simple Syndication) allows you to subscribe to content updates from 
 
 ---
 
+## 5a. ADS Alerts (Astronomy & Astrophysics)
+
+### Setup
+
+1. Sign in at [ADS](https://ui.adsabs.harvard.edu).
+2. Run a fielded query such as `title:"galaxy" AND year:2023-`.
+3. Create a notification and choose a daily or weekly cadence.
+
+### Notification Types
+
+- **Keyword alerts**: Track new papers matching a saved query.
+- **Citation alerts**: Track papers citing a stable ADS bibcode.
+- **Author alerts**: Track new papers by author or ORCID.
+
+### Search Syntax
+
+| Syntax | Example | Meaning |
+|--------|---------|---------|
+| `title:"phrase"` | `title:"dark matter"` | Exact phrase in title |
+| `author:"^Name"` | `author:"^Planck"` | Exact first-author match |
+| `bibstem:...` | `bibstem:ApJ` | Specific journal |
+| `year:YYYY-YYYY` | `year:2020-2025` | Date range |
+| `property:refereed` | `property:refereed` | Peer-reviewed only |
+
+Use separate alerts for major keyword clusters and bibcode-based tracking for key papers. ADS focuses on astronomy and related physical sciences, may have an indexing delay, and requires a free API token for programmatic access.
+
+---
+
 ## 6. Citation Tracking
 
 ### Web of Science

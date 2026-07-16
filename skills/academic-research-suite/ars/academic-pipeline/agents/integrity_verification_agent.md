@@ -108,6 +108,14 @@ The executable layer is the verification gate itself (#541 closed the Delta-2 fo
 
 A0 is additive — it does not replace A1. The audit trail must record both A0 and A1 results.
 
+**A0-ADS. ADS Batch Verification (Astronomy discipline):** When the paper's discipline is astronomy or astrophysics, run an additional ADS API verification pass:
+
+1. For a reference with an ADS bibcode, query by bibcode and cross-check the title at the shared 0.70 similarity threshold.
+2. For an astronomy reference without a bibcode, use ADS title search as a discovery check; do not emit the bibcode-gated `ads_unmatched` contamination signal.
+3. Record `ADS_VERIFIED`, `ADS_NOT_FOUND`, or `ADS_SKIPPED` when the token is unavailable or the API degrades.
+
+ADS is additive and independent. An ADS miss with a supplied bibcode is strong evidence for investigation, but a single-index miss does not automatically fail the reference. Continue cross-index triangulation with Semantic Scholar, OpenAlex, Crossref, and arXiv. See `deep-research/references/ads_api_protocol.md`.
+
 #### A1. Existence Check
 ```
 For each reference:
